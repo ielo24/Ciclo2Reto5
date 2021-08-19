@@ -1,0 +1,286 @@
+/*
+ * Pueda usar esta plantilla para la carga del reto a iMaster
+ * Copie las clases de los paquetes Modelo, Vista, Controlador y Util
+ * No incluya los import de los archivos .java solo las clases
+ */
+// Importaciones necesarias en iMaster
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+// Util (No modificar)
+class JDBCUtilities {
+    private static final String DATABASE_LOCATION = "ProyectosConstruccion.db";
+
+    public static Connection getConnection() throws SQLException {
+        String url = "jdbc:sqlite:"+DATABASE_LOCATION;
+
+        return DriverManager.getConnection(url);
+    }
+}
+
+// Remplace en adelante por las clases de sus archivos .java
+
+// Vista
+class VistaRequerimientos {
+    
+    public static final ControladorRequerimientos controlador = new ControladorRequerimientos();
+
+    public static void requerimiento1() {
+        try {
+
+            ArrayList<Requerimiento_1Vo> resultado_requerimiento1 = controlador.consultarRequerimiento1();
+            resultado_requerimiento1.forEach(System.out::println);
+            // Su código
+
+        } catch (Exception e) {
+            System.out.println("Se ha producido el siguiente error:" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void requerimiento2() {
+        try {
+            ArrayList<Requerimiento_2Vo> resultado_requerimiento2 = controlador.consultarRequerimiento2();
+            resultado_requerimiento2.forEach(System.out::println);
+            // Su código
+        } catch (Exception e) {
+            System.out.println("Se ha producido el siguiente error:" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void requerimiento3() {
+        try {
+            ArrayList<Requerimiento_3Vo> resultado_requerimiento3 = controlador.consultarRequerimiento3();
+            resultado_requerimiento3.forEach(System.out::println);
+            // Su código
+        } catch (Exception e) {
+            System.out.println("Se ha producido el siguiente error:" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+
+// Controlador
+class ControladorRequerimientos {
+    // Su código
+    private Requerimiento_1Dao requerimiento_1dao;
+    private Requerimiento_2Dao requerimiento_2dao;
+    private Requerimiento_3Dao requerimiento_3dao;
+
+    public ControladorRequerimientos() {
+        this.requerimiento_1dao = new Requerimiento_1Dao();
+        this.requerimiento_2dao = new Requerimiento_2Dao();
+        this.requerimiento_3dao = new Requerimiento_3Dao();
+
+    }
+
+    public ArrayList<Requerimiento_1Vo> consultarRequerimiento1() throws SQLException {
+        // Su código
+        // System.out.println("ahora si estamos aca");
+        return this.requerimiento_1dao.requerimiento1();
+
+    }
+
+    public ArrayList<Requerimiento_2Vo> consultarRequerimiento2() throws SQLException {
+        // Su código
+        return this.requerimiento_2dao.requerimiento2();
+    }
+
+    public ArrayList<Requerimiento_3Vo> consultarRequerimiento3() throws SQLException {
+        // Su código
+        return this.requerimiento_3dao.requerimiento3();
+    }
+
+}
+
+// Modelo
+// VO
+class Requerimiento_1 {
+   // Su código
+    private Integer idlider;
+    private String nombre;
+    private String priapellido;
+    private Integer salario;
+
+    public Requerimiento_1Vo() {
+    }
+
+    public Integer getIdlider() {
+        return idlider;
+    }
+
+    public void setIdlider(Integer idlider) {
+        this.idlider = idlider;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getPriapellido() {
+        return priapellido;
+    }
+
+    public void setPriapellido(String priapellido) {
+        this.priapellido = priapellido;
+    }
+
+    public Integer getSalario() {
+        return salario;
+    }
+
+    public void setSalario(Integer salario) {
+        this.salario = salario;
+    }
+
+    @Override
+    public String toString() {
+        return idlider + " " + nombre + " " + priapellido + " " + salario;
+    }
+
+}
+
+class Requerimiento_2 {
+      // Su código
+    private Integer idpro;
+    private String nommat;
+
+    public Requerimiento_2Vo() {
+    }
+
+    public Integer getIdpro() {
+        return idpro;
+    }
+
+    public void setIdpro(Integer idpro) {
+        this.idpro = idpro;
+    }
+
+    public String getNommat() {
+        return nommat;
+    }
+
+    public void setNommat(String nommat) {
+        this.nommat = nommat;
+    }
+
+    @Override
+    public String toString() {
+        return idpro + " " + nommat;
+    }
+
+}
+
+class Requerimiento_3 {
+   // Su código
+    private Integer idpro;
+    private String ciudadpro;
+    private String nomlider;
+
+    public Requerimiento_3Vo() {
+    }
+
+    public Integer getIdpro() {
+        return idpro;
+    }
+
+    public void setIdpro(Integer idpro) {
+        this.idpro = idpro;
+    }
+
+    public String getCiudadpro() {
+        return ciudadpro;
+    }
+
+    public void setCiudadpro(String ciudadpro) {
+        this.ciudadpro = ciudadpro;
+    }
+
+    public String getNomlider() {
+        return nomlider;
+    }
+
+    public void setNomlider(String nomlider) {
+        this.nomlider = nomlider;
+    }
+
+    @Override
+    public String toString() {
+        return idpro + " " + ciudadpro + " " + nomlider;
+    }
+}
+
+// DAO
+class Requerimiento_1Dao {
+        public ArrayList<Requerimiento_1Vo> requerimiento1() throws SQLException {
+        Connection coneccion = JDBCUtilities.getConnection();
+        ArrayList<Requerimiento_1Vo> list1 = new ArrayList<Requerimiento_1Vo>();
+        String sql = "SELECT l.ID_Lider , l.Nombre , l.Primer_Apellido ,l.Salario FROM Lider l WHERE (SELECT AVG(Salario)from Lider l) <l.Salario ORDER by l.Salario DESC; ";
+        try (Statement stmt = coneccion.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Requerimiento_1Vo requerimiento1 = new Requerimiento_1Vo();
+                requerimiento1.setIdlider(rs.getInt("ID_Lider"));
+                requerimiento1.setNombre(rs.getString("Nombre"));
+                requerimiento1.setPriapellido(rs.getString("Primer_Apellido"));
+                requerimiento1.setSalario(rs.getInt("Salario"));
+                list1.add(requerimiento1);
+
+            }
+        }
+        // System.out.println("ajajaja");
+        return list1;
+        // Su código
+    }
+}
+
+class Requerimiento_2Dao {
+    public ArrayList<Requerimiento_2Vo> requerimiento2() throws SQLException {
+        Connection coneccion = JDBCUtilities.getConnection();
+        ArrayList<Requerimiento_2Vo> list2 = new ArrayList<Requerimiento_2Vo>();
+        String sql = "SELECT p.ID_Proyecto ,mc.Nombre_Material FROM Proyecto p JOIN Compra c ON (p.ID_Proyecto=c.ID_Proyecto) JOIN MaterialConstruccion mc ON(mc.ID_MaterialConstruccion=c.ID_MaterialConstruccion) WHERE c.ID_Proyecto IN (12,15,18) ORDER BY c.ID_Proyecto DESC;";
+        try (Statement stmt = coneccion.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Requerimiento_2Vo requerimiento2 = new Requerimiento_2Vo();
+                requerimiento2.setIdpro(rs.getInt("ID_Proyecto"));
+                requerimiento2.setNommat(rs.getString("Nombre_Material"));
+                list2.add(requerimiento2);
+
+            }
+        }
+        // Su código
+        return list2;
+    }
+
+}
+
+class Requerimiento_3Dao {
+    public ArrayList<Requerimiento_3Vo> requerimiento3() throws SQLException {
+        // Su código
+        Connection coneccion = JDBCUtilities.getConnection();
+        ArrayList<Requerimiento_3Vo> list3 = new ArrayList<Requerimiento_3Vo>();
+        String sql = "SELECT p.ID_Proyecto , p.Ciudad, l.Nombre FROM Proyecto p INNER join Lider l ON (l.ID_Lider=p.ID_Lider) WHERE p.ID_Proyecto <=30;";
+        try (Statement stmt = coneccion.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Requerimiento_3Vo requerimiento3 = new Requerimiento_3Vo();
+                requerimiento3.setIdpro(rs.getInt("ID_Proyecto"));
+                requerimiento3.setCiudadpro(rs.getString("Ciudad"));
+                requerimiento3.setNomlider(rs.getString("Nombre"));
+                list3.add(requerimiento3);
+
+            }
+
+        }
+        return list3;
+    }
+
+}
